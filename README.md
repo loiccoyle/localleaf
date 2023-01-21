@@ -1,6 +1,6 @@
 # 🍃 localleaf
 
-> Easy breeze latex.
+> Easy breezy latex.
 
 Spins up a latex docker image, monitors .tex files and builds on change.
 
