@@ -3,7 +3,7 @@
 set -e
 
 CMD="$0"
-# From: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js
+# From: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L16
 declare -A ENGINE_FLAGS=()
 ENGINE_FLAGS[latex]='-pdfdvi'
 ENGINE_FLAGS[lualatex]='-lualatex'
@@ -15,45 +15,51 @@ if type tput >/dev/null; then
     RESET="$(tput sgr0)"
     COLOR1="$(tput setaf 1)"
     COLOR2="$(tput setaf 2)"
+    COLOR3="$(tput setaf 3)"
 else
     # BOLD=""
     RESET=""
     COLOR1=""
     COLOR2=""
+    COLOR3=""
 fi
 
 err() {
-    printf "${COLOR1}Err:${RESET} %s" "$@" 1>&2 && exit 2
+    printf "${COLOR1}[$CMD] Err:${RESET} %s\n" "$@" 1>&2 && exit 2
 }
 warn() {
-    printf "${COLOR2}Warn:${RESET} %s" "$@" 1>&2
+    printf "${COLOR3}[$CMD] Warn:${RESET} %s\n" "$@" 1>&2
+}
+info() {
+    printf "${COLOR2}[$CMD] Info:${RESET} %s\n" "$@" 1>&2
 }
 
 usage() {
-    printf "Edit your overleaf project locally.
+    printf "Edit your overleaf projects locally.
 
-
+Spins up a latex docker image, monitors .tex files and builds on change.
 
 Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -h                          Show this message and exit.
-  -e                          Latex engine [pdflatex] {%s}
-  -i                          Docker image. [texlive/texlive]
-  -c                          Commit on exit.
+  -e                          Latex engine [%s] {%s}
+  -i                          Docker image. [%s]
+  -c                          Commit changes on exit.
   PROJECT_DIR                 Folder conatining your project.
   MAIN_DOCUMENT               The main document of your project.
-  " "$CMD" "$(
+  " "$CMD" "$ENGINE" "$(
         IFS=,
         echo "${!ENGINE_FLAGS[*]}"
-    )"
+    )" "$IMAGE"
 }
 
 check_git() {
     git -C "$1" rev-parse 2>/dev/null
 }
 
-PROJECT_DIR="$1"
-MAIN_DOCUMENT="$2"
+type "docker" >/dev/null || err "'docker' not found."
+
 ENGINE="pdflatex"
+IMAGE="texlive/texlive"
 COMMIT_TRAP=0
 
 while getopts "e:i:ch" opt; do
@@ -64,21 +70,21 @@ while getopts "e:i:ch" opt; do
         ENGINE="$OPTARG"
         ;;
     "i") IMAGE="$OPTARG" ;;
-    "c")
-        if check_git "$PROJECT_DIR"; then
-            COMMIT_TRAP=1
-        else
-            err "'$PROJECT_DIR' is not a git dir."
-        fi
-        ;;
+    "c") COMMIT_TRAP=1 ;;
     ?) usage && exit 1 ;;
     esac
 done
+shift $((OPTIND - 1))
+PROJECT_DIR="$1"
+PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
+MAIN_DOCUMENT="$2"
 
-# [ -n "$COMMIT_TRAP" ] && trap 'git -C $PROJECT_DIR add * && git commit -m "Update"' EXIT
+[ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
 
-echo $COMMIT_TRAP
-exit
+if [ -n "$COMMIT_TRAP" ]; then
+    check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
+    trap 'git -C $PROJECT_DIR add -u && git commit -m "Update [localleaf]"' EXIT
+fi
 
 if [ -z "$MAIN_DOCUMENT" ]; then
     ROOT_TEX_FILES=("$PROJECT_DIR"/*.tex)
@@ -86,13 +92,27 @@ if [ -z "$MAIN_DOCUMENT" ]; then
     warn "Guessing main document: '$MAIN_DOCUMENT'"
 fi
 
-LATEX_BUILD="while sleep 1; do
-find -type f -name '*.tex' | entr -d sh -c \"latexmk -cd -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")\"
-done"
+# Based on: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L153
+# entr: https://manpages.org/entr
 
-sudo docker run -it --rm -v "$(pwd)/$PROJECT_DIR":"/$(basename "$PROJECT_DIR")" "$IMAGE" bash -ic "
-apt update
-apt install entr
-cd /$PROJECT_DIR
+# Monitor *.tex recursively files and run compilation when a change is detected.
+# When enter detects a new file in the monitored directory, it is added to the monitoring.
+LATEX_BUILD="
+while sleep 1; do
+  find -type f -name '*.tex' | entr -d sh -c '
+    latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")
+    echo \"$(info "Latex build done" 2>&1)\"
+' && echo \"$(info "Double tap <C-c> to quit" 2>&1)\"
+done
+"
+
+info "Double tap <C-c> to quit"
+info "Starting docker container (requires sudo)"
+
+sudo docker run -it --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
+apt-get update >/dev/null 2>&1
+apt-get install entr >/dev/null 2>&1
+cd /$PROJECT_DIR_NAME
+echo '$(info "Monitoring *.tex files" 2>&1)'
 $LATEX_BUILD
 "
