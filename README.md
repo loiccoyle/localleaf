@@ -7,7 +7,7 @@ Spins up a latex docker image, monitors .tex files and builds on change.
 ## 📋 Usage
 
 1. Download your overleaf source and extract it.
-   > If you sync your project with github, clone it.
+   > Pro-tip: sync your project with github and clone it instead!
 2. Run `localleaf project_folder project_folder/main_document.tex`
 
 If in doubt check the `-h`elp.
