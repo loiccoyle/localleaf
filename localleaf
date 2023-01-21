@@ -44,7 +44,7 @@ Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -e                          Latex engine [%s] {%s}
   -i                          Docker image. [%s]
   -c                          Commit changes on exit.
-  PROJECT_DIR                 Folder conatining your project.
+  PROJECT_DIR                 Folder containing your project.
   MAIN_DOCUMENT               The main document of your project.
 " "$CMD" "$ENGINE" "$(
         IFS=,

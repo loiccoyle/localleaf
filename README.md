@@ -25,7 +25,7 @@ Usage: ./localleaf [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -e                          Latex engine [pdflatex] {latex,pdflatex,xelatex,lualatex}
   -i                          Docker image. [texlive/texlive]
   -c                          Commit changes on exit.
-  PROJECT_DIR                 Folder conatining your project.
+  PROJECT_DIR                 Folder containing your project.
   MAIN_DOCUMENT               The main document of your project.
 ```
 
@@ -53,3 +53,4 @@ TODO
 - commit on exit
 - test
 - completion
+- ci
