@@ -46,7 +46,7 @@ Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -c                          Commit changes on exit.
   PROJECT_DIR                 Folder conatining your project.
   MAIN_DOCUMENT               The main document of your project.
-  " "$CMD" "$ENGINE" "$(
+" "$CMD" "$ENGINE" "$(
         IFS=,
         echo "${!ENGINE_FLAGS[*]}"
     )" "$IMAGE"
