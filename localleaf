@@ -1,0 +1,98 @@
+#!/bin/env bash
+
+set -e
+
+CMD="$0"
+# From: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js
+declare -A ENGINE_FLAGS=()
+ENGINE_FLAGS[latex]='-pdfdvi'
+ENGINE_FLAGS[lualatex]='-lualatex'
+ENGINE_FLAGS[pdflatex]='-pdf'
+ENGINE_FLAGS[xelatex]='-xelatex'
+# Formating codes
+if type tput >/dev/null; then
+    # BOLD="$(tput bold)"
+    RESET="$(tput sgr0)"
+    COLOR1="$(tput setaf 1)"
+    COLOR2="$(tput setaf 2)"
+else
+    # BOLD=""
+    RESET=""
+    COLOR1=""
+    COLOR2=""
+fi
+
+err() {
+    printf "${COLOR1}Err:${RESET} %s" "$@" 1>&2 && exit 2
+}
+warn() {
+    printf "${COLOR2}Warn:${RESET} %s" "$@" 1>&2
+}
+
+usage() {
+    printf "Edit your overleaf project locally.
+
+
+
+Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
+  -h                          Show this message and exit.
+  -e                          Latex engine [pdflatex] {%s}
+  -i                          Docker image. [texlive/texlive]
+  -c                          Commit on exit.
+  PROJECT_DIR                 Folder conatining your project.
+  MAIN_DOCUMENT               The main document of your project.
+  " "$CMD" "$(
+        IFS=,
+        echo "${!ENGINE_FLAGS[*]}"
+    )"
+}
+
+check_git() {
+    git -C "$1" rev-parse 2>/dev/null
+}
+
+PROJECT_DIR="$1"
+MAIN_DOCUMENT="$2"
+ENGINE="pdflatex"
+COMMIT_TRAP=0
+
+while getopts "e:i:ch" opt; do
+    case $opt in
+    "h") usage && exit ;;
+    "e")
+        [[ -v ${ENGINE_FLAGS[$OPTARG]} ]] || err "Unknown latex engine '$OPTARG'"
+        ENGINE="$OPTARG"
+        ;;
+    "i") IMAGE="$OPTARG" ;;
+    "c")
+        if check_git "$PROJECT_DIR"; then
+            COMMIT_TRAP=1
+        else
+            err "'$PROJECT_DIR' is not a git dir."
+        fi
+        ;;
+    ?) usage && exit 1 ;;
+    esac
+done
+
+# [ -n "$COMMIT_TRAP" ] && trap 'git -C $PROJECT_DIR add * && git commit -m "Update"' EXIT
+
+echo $COMMIT_TRAP
+exit
+
+if [ -z "$MAIN_DOCUMENT" ]; then
+    ROOT_TEX_FILES=("$PROJECT_DIR"/*.tex)
+    MAIN_DOCUMENT="${ROOT_TEX_FILES[0]}"
+    warn "Guessing main document: '$MAIN_DOCUMENT'"
+fi
+
+LATEX_BUILD="while sleep 1; do
+find -type f -name '*.tex' | entr -d sh -c \"latexmk -cd -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")\"
+done"
+
+sudo docker run -it --rm -v "$(pwd)/$PROJECT_DIR":"/$(basename "$PROJECT_DIR")" "$IMAGE" bash -ic "
+apt update
+apt install entr
+cd /$PROJECT_DIR
+$LATEX_BUILD
+"
