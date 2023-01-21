@@ -47,3 +47,9 @@ mv localleaf/localleaf ~/.local/bin/
 
 TODO
 -->
+
+## TODO
+
+- commit on exit
+- test
+- completion

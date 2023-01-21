@@ -83,6 +83,7 @@ MAIN_DOCUMENT="$2"
 
 if [ -n "$COMMIT_TRAP" ]; then
     check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
+    # TODO: Check if the commit works
     trap 'git -C $PROJECT_DIR add -u && git commit -m "Update [localleaf]"' EXIT
 fi
 
