@@ -96,8 +96,8 @@ fi
 # Based on: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L153
 # entr: https://manpages.org/entr
 
-# Monitor *.tex recursively files and run compilation when a change is detected.
-# When enter detects a new file in the monitored directory, it is added to the monitoring.
+# Monitor *.tex files recursively and run compilation when a change is detected.
+# When entr detects a new file in the monitored directory, it is added to the monitoring.
 LATEX_BUILD="
 while sleep 1; do
   find -type f -name '*.tex' | entr -d sh -c '
