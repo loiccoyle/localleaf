@@ -51,7 +51,7 @@ TODO
 
 ## 📜 TODO
 
-- [x] ci
-- [ ] commit on exit
-- [ ] test
-- [ ] completion
+- [x] Add ci
+- [ ] Double check commit on exit
+- [ ] Add tests to ci
+- [ ] Fix root permission on build files

@@ -97,17 +97,17 @@ if [ -z "$MAIN_DOCUMENT" ]; then
 fi
 
 # Based on: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L153
-# entr: https://manpages.org/entr
-
-# Monitor *.tex files recursively and run compilation when a change is detected.
-# When entr detects a new file in the monitored directory, it is added to the monitoring.
 if [ "$BUILD_ONCE" = 1 ]; then
+    # Just build once
     LATEX_BUILD="
 echo '$(info "Building once" 2>&1)'
 latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")
 echo '$(info "Latex build done" 2>&1)'
 "
 else
+    # Monitor *.tex files recursively and run compilation when a change is detected.
+    # When entr detects a new file in the monitored directory, it is added to the monitoring.
+    # entr: https://manpages.org/entr
     LATEX_BUILD="
 echo '$(info "Monitoring *.tex files" 2>&1)'
 while sleep 1; do
