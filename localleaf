@@ -59,7 +59,7 @@ check_git() {
 type "docker" >/dev/null || err "'docker' not found."
 
 ENGINE="pdflatex"
-IMAGE="texlive/texlive"
+IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
 
 while getopts "e:i:ch" opt; do
@@ -81,7 +81,7 @@ MAIN_DOCUMENT="$2"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
 
-if [ -n "$COMMIT_TRAP" ]; then
+if [ "$COMMIT_TRAP" == 1 ]; then
     check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
     # TODO: Check if the commit works
     trap 'git -C $PROJECT_DIR add -u && git commit -m "Update [localleaf]"' EXIT
