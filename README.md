@@ -13,6 +13,7 @@ Spins up a latex docker image, monitors .tex files and builds on change.
 If in doubt check the `-h`elp.
 
 <!-- help start -->
+
 ```
 $ localleaf -h
 Edit your overleaf projects locally.
@@ -27,6 +28,7 @@ Usage: localleaf [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   PROJECT_DIR                 Folder containing your project.
   MAIN_DOCUMENT               The main document of your project.
 ```
+
 <!-- help end -->
 
 ## 📦 Installation
@@ -48,7 +50,7 @@ TODO
 
 ## 📜 TODO
 
-- commit on exit
-- test
-- completion
-- ci
+- [x] ci
+- [ ] commit on exit
+- [ ] test
+- [ ] completion
