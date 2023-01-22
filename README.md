@@ -48,7 +48,7 @@ mv localleaf/localleaf ~/.local/bin/
 TODO
 -->
 
-## TODO
+## 📜 TODO
 
 - commit on exit
 - test
