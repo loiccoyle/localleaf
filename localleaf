@@ -10,6 +10,7 @@ ENGINE_FLAGS[lualatex]='-lualatex'
 ENGINE_FLAGS[pdflatex]='-pdf'
 ENGINE_FLAGS[xelatex]='-xelatex'
 # Formating codes
+echo "pre tput"
 if [ -n "$TERM" ] && type tput >/dev/null; then
     # BOLD="$(tput bold)"
     RESET="$(tput sgr0)"
@@ -23,6 +24,7 @@ else
     COLOR2=""
     COLOR3=""
 fi
+echo "post tput"
 
 err() {
     printf "${COLOR1}[$CMD] Err:${RESET} %s\n" "$@" 1>&2 && exit 2
