@@ -10,7 +10,7 @@ ENGINE_FLAGS[lualatex]='-lualatex'
 ENGINE_FLAGS[pdflatex]='-pdf'
 ENGINE_FLAGS[xelatex]='-xelatex'
 # Formating codes
-if type tput >/dev/null; then
+if [ -n "$TERM" ] && type tput >/dev/null; then
     # BOLD="$(tput bold)"
     RESET="$(tput sgr0)"
     COLOR1="$(tput setaf 1)"
