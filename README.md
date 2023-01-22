@@ -15,6 +15,7 @@ If in doubt check the `-h`elp.
 <!-- help start -->
 ```
 $ localleaf -h
+pre tput
 ```
 <!-- help end -->
 
