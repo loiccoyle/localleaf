@@ -111,8 +111,6 @@ info "Double tap <C-c> to quit"
 info "Starting docker container (requires sudo)"
 
 sudo docker run -it --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
-apt-get update >/dev/null 2>&1
-apt-get install entr >/dev/null 2>&1
 cd /$PROJECT_DIR_NAME
 echo '$(info "Monitoring *.tex files" 2>&1)'
 $LATEX_BUILD
