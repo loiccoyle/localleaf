@@ -13,22 +13,9 @@ Spins up a latex docker image, monitors .tex files and builds on change.
 If in doubt check the `-h`elp.
 
 <!-- help start -->
-
 ```
 $ localleaf -h
-Edit your overleaf projects locally.
-
-Spins up a latex docker image, monitors .tex files and builds on change.
-
-Usage: ./localleaf [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
-  -h                          Show this message and exit.
-  -e                          Latex engine [pdflatex] {latex,pdflatex,xelatex,lualatex}
-  -i                          Docker image. [texlive/texlive]
-  -c                          Commit changes on exit.
-  PROJECT_DIR                 Folder containing your project.
-  MAIN_DOCUMENT               The main document of your project.
 ```
-
 <!-- help end -->
 
 ## 📦 Installation
