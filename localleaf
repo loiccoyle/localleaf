@@ -2,7 +2,7 @@
 
 set -e
 
-CMD="$0"
+CMD="$(basename "$0")"
 # From: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L16
 declare -A ENGINE_FLAGS=()
 ENGINE_FLAGS[latex]='-pdfdvi'
@@ -10,8 +10,7 @@ ENGINE_FLAGS[lualatex]='-lualatex'
 ENGINE_FLAGS[pdflatex]='-pdf'
 ENGINE_FLAGS[xelatex]='-xelatex'
 # Formating codes
-echo "pre tput"
-if [ -n "$TERM" ] && type tput >/dev/null; then
+if [ "$TERM" != "dumb" ] && type tput >/dev/null; then
     # BOLD="$(tput bold)"
     RESET="$(tput sgr0)"
     COLOR1="$(tput setaf 1)"
@@ -24,7 +23,6 @@ else
     COLOR2=""
     COLOR3=""
 fi
-echo "post tput"
 
 err() {
     printf "${COLOR1}[$CMD] Err:${RESET} %s\n" "$@" 1>&2 && exit 2
