@@ -34,6 +34,7 @@ jobs:
         uses: whoan/docker-build-with-cache-action@v6
         with:
           image_name: loiccoyle/localleaf
+          push_image_and_stages: false
       - name: Run tests
         run: |
           make tests
