@@ -1,4 +1,7 @@
 # 🍃 localleaf
+![License](https://img.shields.io/github/license/loiccoyle/localleaf)
+[![CI](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg)](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml)
+
 
 > Easy breezy latex.
 
