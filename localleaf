@@ -126,7 +126,7 @@ fi
 info "Double tap <C-c> to quit"
 info "Starting docker container (requires sudo)"
 
-sudo docker run -it --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
+sudo docker run --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
 cd /$PROJECT_DIR_NAME
 $LATEX_BUILD
 "
