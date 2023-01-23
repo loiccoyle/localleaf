@@ -30,6 +30,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
+      - name: Pull docker image
+        run: docker pull loiccoyle/localleaf
       - name: Run tests
         run: |
           make tests
