@@ -40,7 +40,7 @@ jobs:
       - if: steps.image-cache.outputs.cache-hit != 'true'
         run: |
           docker pull loiccoyle/localleaf
-          docker save -o ~/image-cache/localleaf.tar localleaf
+          docker save -o ~/image-cache/localleaf.tar loiccoyle/localleaf
       - if: steps.image-cache.outputs.cache-hit == 'true'
         run: docker load -i ~/image-cache/localleaf.tar
 
