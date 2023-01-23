@@ -83,6 +83,7 @@ PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
 MAIN_DOCUMENT="$2"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
+[ ! -d "$PROJECT_DIR" ] && err "'$PROJECT_DIR' is not a directory."
 
 if [ "$COMMIT_TRAP" == 1 ]; then
     check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
@@ -95,6 +96,9 @@ if [ -z "$MAIN_DOCUMENT" ]; then
     MAIN_DOCUMENT="${ROOT_TEX_FILES[0]}"
     warn "Guessing main document: '$MAIN_DOCUMENT'"
 fi
+
+[ -z "$MAIN_DOCUMENT" ] && err "Missing MAIN_DOCUMENT"
+[ ! -f "$MAIN_DOCUMENT" ] && err "'$MAIN_DOCUMENT' not found."
 
 # Based on: https://github.com/overleaf/overleaf/blob/main/services/clsi/app/js/LatexRunner.js#L153
 if [ "$BUILD_ONCE" = 1 ]; then
