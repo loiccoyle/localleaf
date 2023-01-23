@@ -4,4 +4,4 @@ readme:
 
 .PHONY:tests
 tests:
-	./tests/test.sh
+	./tests/run.sh
