@@ -129,4 +129,5 @@ info "Starting docker container (requires sudo)"
 sudo docker run -t --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
 cd /$PROJECT_DIR_NAME
 $LATEX_BUILD
+
 "
