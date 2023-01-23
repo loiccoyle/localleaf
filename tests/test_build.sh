@@ -32,7 +32,7 @@ test_build() {
     TEST_NAME="${FUNCNAME[0]}"
     TEST_DESC="Build a basic .tex file once, should generate a pdf."
 
-    "$CMD" -o "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex >/dev/null 2>&1
+    "$CMD" -o "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
     [ -f "$SCRIPT_DIR/project/main.pdf" ]
 }
 
