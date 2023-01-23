@@ -19,7 +19,7 @@ If in doubt check the `-h`elp.
 
 ```
 $ localleaf -h
-Edit your overleaf projects locally.
+Easy breezy latex.
 
 Spins up a latex docker image, monitors .tex files and builds on change.
 
