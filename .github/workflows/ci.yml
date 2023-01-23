@@ -39,8 +39,8 @@ jobs:
           key: image-cache-${{ runner.os }}
       - if: steps.image-cache.outputs.cache-hit != 'true'
         run: |
-          docker pull postgres:13
-          docker save -o ~/image-cache/localleaf.tar loiccoyle/localleaf
+          docker pull loiccoyle/localleaf
+          docker save -o ~/image-cache/localleaf.tar localleaf
       - if: steps.image-cache.outputs.cache-hit == 'true'
         run: docker load -i ~/image-cache/localleaf.tar
 
