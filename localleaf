@@ -45,6 +45,7 @@ Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -i                          Docker image. [%s]
   -c                          Commit changes on exit.
   -o                          Don't monitor, build once and exit.
+  -p                          Set build files owner's to \$USER:\$USER on exit.
   PROJECT_DIR                 Folder containing your project.
   MAIN_DOCUMENT               The main document of your project.
 " "$CMD" "$ENGINE" "$(
@@ -62,9 +63,10 @@ type "docker" >/dev/null || err "'docker' not found."
 ENGINE="pdflatex"
 IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
+CHOWN_TRAP=0
 BUILD_ONCE=0
 
-while getopts "e:i:och" opt; do
+while getopts "e:i:opch" opt; do
     case $opt in
     "h") usage && exit ;;
     "e")
@@ -74,6 +76,7 @@ while getopts "e:i:och" opt; do
     "i") IMAGE="$OPTARG" ;;
     "o") BUILD_ONCE=1 ;;
     "c") COMMIT_TRAP=1 ;;
+    "p") CHOWN_TRAP=1 ;;
     ?) usage && exit 1 ;;
     esac
 done
@@ -89,6 +92,10 @@ if [ "$COMMIT_TRAP" == 1 ]; then
     check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
     # TODO: Check if the commit works
     trap 'git -C $PROJECT_DIR add -u && git commit -m "Update [localleaf]"' EXIT
+fi
+
+if [ "$CHOWN_TRAP" == 1 ]; then
+    trap 'sudo chown -R --from root:root $USER:$USER $PROJECT_DIR' EXIT
 fi
 
 if [ -z "$MAIN_DOCUMENT" ]; then

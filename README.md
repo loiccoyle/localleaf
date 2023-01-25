@@ -1,7 +1,7 @@
 # 🍃 localleaf
+
 ![License](https://img.shields.io/github/license/loiccoyle/localleaf)
 [![CI](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg)](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml)
-
 
 > Easy breezy latex.
 
@@ -29,6 +29,7 @@ Usage: localleaf [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
   -i                          Docker image. [loiccoyle/localleaf]
   -c                          Commit changes on exit.
   -o                          Don't monitor, build once and exit.
+  -p                          Set build files owner's to $USER:$USER on exit.
   PROJECT_DIR                 Folder containing your project.
   MAIN_DOCUMENT               The main document of your project.
 ```
@@ -55,6 +56,6 @@ TODO
 ## 📜 TODO
 
 - [x] Add ci
+- [x] Add tests to ci
+- [x] Fix root permission on build files
 - [ ] Double check commit on exit
-- [ ] Add tests to ci
-- [ ] Fix root permission on build files

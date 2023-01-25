@@ -26,6 +26,7 @@ run() {
         ERROR_COUNT=$((ERROR_COUNT + 1))
     fi
     printf "%s\n%s: %s\n" "$TEST_DESC" "$TEST_NAME" "$status"
+    cleanup
 }
 
 test_build() {
@@ -36,6 +37,16 @@ test_build() {
     [ -f "$SCRIPT_DIR/project/main.pdf" ]
 }
 
+test_build_chown() {
+    TEST_NAME="${FUNCNAME[0]}"
+    TEST_DESC="Build pdf and set the correct owner."
+
+    "$CMD" -o -p "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
+    [ -f "$SCRIPT_DIR/project/main.pdf" ] &&
+        [ "$(stat --format '%U' $SCRIPT_DIR/project/main.pdf)" = "$USER" ]
+}
+
 run test_build
+run test_build_chown
 
 exit $ERROR_COUNT
