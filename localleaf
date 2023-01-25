@@ -70,7 +70,7 @@ while getopts "e:i:opch" opt; do
     case $opt in
     "h") usage && exit ;;
     "e")
-        [[ -v ${ENGINE_FLAGS[$OPTARG]} ]] || err "Unknown latex engine '$OPTARG'"
+        [[ -v ENGINE_FLAGS[$OPTARG] ]] || err "Unknown latex engine '$OPTARG'"
         ENGINE="$OPTARG"
         ;;
     "i") IMAGE="$OPTARG" ;;
