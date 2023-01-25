@@ -19,7 +19,7 @@ trap cleanup EXIT
 #   $1: test function.
 run() {
     local status
-    if $1; then
+    if "$@" >/dev/null 2>&1; then
         status=✅
     else
         status=❌
@@ -30,10 +30,12 @@ run() {
 }
 
 test_build() {
+    local engine="$1"
+    echo "$engine"
     TEST_NAME="${FUNCNAME[0]}"
-    TEST_DESC="Build a basic .tex file once, should generate a pdf."
+    TEST_DESC="Build a basic .tex file once, should generate a pdf with engine: $engine."
 
-    "$CMD" -o "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
+    "$CMD" -o -e "$engine" "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
     [ -f "$SCRIPT_DIR/project/main.pdf" ]
 }
 
@@ -46,7 +48,9 @@ test_build_chown() {
         [ "$(stat --format '%U' $SCRIPT_DIR/project/main.pdf)" = "$USER" ]
 }
 
-run test_build
+for engine in "latex" "pdflatex" "xelatex" "lualatex"; do
+    run test_build "$engine"
+done
 run test_build_chown
 
 exit $ERROR_COUNT
