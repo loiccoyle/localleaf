@@ -38,6 +38,10 @@ Usage: localleaf [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
 
 ## 📦 Installation
 
+#### Dependencies
+
+You only need `docker`.
+
 #### Manual
 
 Clone this repo and add the script somewhere on your `$PATH`.
