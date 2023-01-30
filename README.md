@@ -2,6 +2,7 @@
 
 ![License](https://img.shields.io/github/license/loiccoyle/localleaf)
 [![CI](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg)](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml)
+[![AUR version](https://img.shields.io/aur/version/localleaf-git)](https://aur.archlinux.org/packages/localleaf-git)
 
 > Easy breezy latex.
 
@@ -51,11 +52,13 @@ git clone https://github.com/loiccoyle/localleaf
 mv localleaf/localleaf ~/.local/bin/
 ```
 
-<!--
-### Arch
+#### Arch
 
-TODO
--->
+Using your favourite AUR helper:
+
+```bash
+paru -S localleaf-git
+```
 
 ## 📜 TODO
 
