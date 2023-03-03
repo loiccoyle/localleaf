@@ -13,8 +13,7 @@ jobs:
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
       - name: Update readme
-        run: |
-          make readme
+        run: make readme
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
