@@ -102,7 +102,7 @@ fi
 if [ -z "$MAIN_DOCUMENT" ]; then
     ROOT_TEX_FILES=("$PROJECT_DIR"/*.tex)
     MAIN_DOCUMENT="${ROOT_TEX_FILES[0]}"
-    warn "Guessing main document: '$MAIN_DOCUMENT'"
+    warn "Guessing main document: '$MAIN_DOCUMENT', use '-m' to specify main latex document."
 fi
 
 [ -z "$MAIN_DOCUMENT" ] && err "Missing MAIN_DOCUMENT"
