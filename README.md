@@ -39,11 +39,11 @@ Usage: localleaf [OPTIONS] [PROJECT_DIR]
 
 ## 📦 Installation
 
-#### Dependencies
+### Dependencies
 
 You only need `docker`.
 
-#### Manual
+### Manual
 
 Clone this repo and add the script somewhere on your `$PATH`.
 
@@ -52,7 +52,7 @@ git clone https://github.com/loiccoyle/localleaf
 mv localleaf/localleaf ~/.local/bin/
 ```
 
-#### Arch
+### Arch
 
 Using your favourite AUR helper:
 
