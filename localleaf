@@ -39,15 +39,15 @@ usage() {
 
 Spins up a latex docker image, monitors .tex files and builds on change.
 
-Usage: %s [OPTIONS] PROJECT_DIR [MAIN_DOCUMENT]
+Usage: %s [OPTIONS] [PROJECT_DIR]
   -h                          Show this message and exit.
-  -e                          Latex engine [%s] {%s}
-  -i                          Docker image. [%s]
+  -d MAIN_DOCUMENT            The main document of the latex project.
+  -e ENGINE                   Latex engine [%s] {%s}
+  -i IMAGE                    Docker image. [%s]
   -c                          Commit changes on exit.
   -o                          Don't monitor, build once and exit.
   -p                          Set build files owner's to \$USER:\$USER on exit.
-  PROJECT_DIR                 Folder containing your project.
-  MAIN_DOCUMENT               The main document of your project.
+  PROJECT_DIR                 Folder containing the latex project.
 " "$CMD" "$ENGINE" "$(
         IFS=,
         echo "${!ENGINE_FLAGS[*]}"
@@ -67,7 +67,7 @@ COMMIT_TRAP=0
 CHOWN_TRAP=0
 BUILD_ONCE=0
 
-while getopts "e:i:opch" opt; do
+while getopts "e:i:m:opch" opt; do
     case $opt in
     "h") usage && exit ;;
     "e")
@@ -75,6 +75,7 @@ while getopts "e:i:opch" opt; do
         ENGINE="$OPTARG"
         ;;
     "i") IMAGE="$OPTARG" ;;
+    "m") MAIN_DOCUMENT="$OPTARG" ;;
     "o") BUILD_ONCE=1 ;;
     "c") COMMIT_TRAP=1 ;;
     "p") CHOWN_TRAP=1 ;;
@@ -82,9 +83,8 @@ while getopts "e:i:opch" opt; do
     esac
 done
 shift $((OPTIND - 1))
-PROJECT_DIR="$1"
+PROJECT_DIR="$(realpath "${1:-.}")"
 PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
-MAIN_DOCUMENT="$2"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
 [ ! -d "$PROJECT_DIR" ] && err "'$PROJECT_DIR' is not a directory."
