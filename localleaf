@@ -58,9 +58,6 @@ check_git() {
     git -C "$1" rev-parse 2>/dev/null
 }
 
-type "docker" >/dev/null || err "'docker' not found."
-type "entr" >/dev/null || err "'entr' not found."
-
 ENGINE="pdflatex"
 IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
@@ -83,6 +80,10 @@ while getopts "e:i:m:opch" opt; do
     esac
 done
 shift $((OPTIND - 1))
+
+type "docker" >/dev/null || err "'docker' not found."
+type "entr" >/dev/null || err "'entr' not found."
+
 PROJECT_DIR="$(realpath "${1:-.}")"
 PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
 
