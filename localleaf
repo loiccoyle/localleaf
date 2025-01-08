@@ -41,7 +41,7 @@ Spins up a latex docker image, monitors .tex files and builds on change.
 
 Usage: %s [OPTIONS] [PROJECT_DIR]
   -h                          Show this message and exit.
-  -d MAIN_DOCUMENT            The main document of the latex project.
+  -m MAIN_DOCUMENT            The main document of the latex project.
   -e ENGINE                   Latex engine [%s] {%s}
   -i IMAGE                    Docker image. [%s]
   -c                          Commit changes on exit.

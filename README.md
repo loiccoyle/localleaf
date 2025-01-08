@@ -26,7 +26,7 @@ Spins up a latex docker image, monitors .tex files and builds on change.
 
 Usage: localleaf [OPTIONS] [PROJECT_DIR]
   -h                          Show this message and exit.
-  -d MAIN_DOCUMENT            The main document of the latex project.
+  -m MAIN_DOCUMENT            The main document of the latex project.
   -e ENGINE                   Latex engine [pdflatex] {latex,pdflatex,xelatex,lualatex}
   -i IMAGE                    Docker image. [loiccoyle/localleaf]
   -c                          Commit changes on exit.
