@@ -126,12 +126,12 @@ while sleep 1; do
   find -type f -name '*.tex' | entr -d sh -c '
     latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")
     echo \"$(info "Latex build done" 2>&1)\"
-' && echo '$(info "Double tap <C-c> to quit" 2>&1)'
+' && echo '$(info "Triple tap <C-c> to quit" 2>&1)'
 done
 "
 fi
 
-info "Double tap <C-c> to quit"
+info "Triple tap <C-c> to quit"
 info "Starting docker container"
 
 docker run -t --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
