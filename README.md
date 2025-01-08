@@ -20,19 +20,6 @@ If in doubt check the `-h`elp.
 
 ```console
 $ localleaf -h
-Easy breezy latex.
-
-Spins up a latex docker image, monitors .tex files and builds on change.
-
-Usage: localleaf [OPTIONS] [PROJECT_DIR]
-  -h                          Show this message and exit.
-  -d MAIN_DOCUMENT            The main document of the latex project.
-  -e ENGINE                   Latex engine [pdflatex] {latex,pdflatex,xelatex,lualatex}
-  -i IMAGE                    Docker image. [loiccoyle/localleaf]
-  -c                          Commit changes on exit.
-  -o                          Don't monitor, build once and exit.
-  -p                          Set build files owner's to $USER:$USER on exit.
-  PROJECT_DIR                 Folder containing the latex project.
 ```
 
 <!-- help end -->
