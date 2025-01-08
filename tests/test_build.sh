@@ -31,11 +31,10 @@ run() {
 
 test_build() {
     local engine="$1"
-    echo "$engine"
     TEST_NAME="${FUNCNAME[0]}"
     TEST_DESC="Build a basic .tex file once, should generate a pdf with engine: $engine."
 
-    "$CMD" -1 -e "$engine" "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
+    "$CMD" -1 -e "$engine" -m "$SCRIPT_DIR"/project/main.tex "$SCRIPT_DIR"/project
     [ -f "$SCRIPT_DIR/project/main.pdf" ]
 }
 
@@ -43,7 +42,7 @@ test_build_chown() {
     TEST_NAME="${FUNCNAME[0]}"
     TEST_DESC="Build pdf and set the correct owner."
 
-    "$CMD" -1 -p "$SCRIPT_DIR"/project "$SCRIPT_DIR"/project/main.tex
+    "$CMD" -1 -p -m "$SCRIPT_DIR"/project/main.tex "$SCRIPT_DIR"/project
     [ -f "$SCRIPT_DIR/project/main.pdf" ] &&
         [ "$(stat --format '%U' $SCRIPT_DIR/project/main.pdf)" = "$USER" ]
 }
