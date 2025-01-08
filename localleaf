@@ -59,6 +59,7 @@ check_git() {
 }
 
 type "docker" >/dev/null || err "'docker' not found."
+type "entr" >/dev/null || err "'entr' not found."
 
 ENGINE="pdflatex"
 IMAGE="loiccoyle/localleaf"
