@@ -82,7 +82,6 @@ done
 shift $((OPTIND - 1))
 
 type "docker" >/dev/null || err "'docker' not found."
-type "entr" >/dev/null || err "'entr' not found."
 
 PROJECT_DIR="$(realpath "${1:-.}")"
 PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
