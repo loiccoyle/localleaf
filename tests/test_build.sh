@@ -19,7 +19,7 @@ trap cleanup EXIT
 #   $1: test function.
 run() {
     local status
-    if "$@" >/dev/null 2>&1; then
+    if "$@"; then
         status=✅
     else
         status=❌
