@@ -32,7 +32,7 @@ Usage: localleaf [OPTIONS] [PROJECT_DIR]
   -c                          Commit changes on exit.
   -o                          Don't monitor, build once and exit.
   -p                          Set build files owner's to $USER:$USER on exit.
-  PROJECT_DIR                 Folder containing the latex project.
+  PROJECT_DIR                 Root directory of the latex project ['.'].
 ```
 
 <!-- help end -->
