@@ -3,7 +3,7 @@
 shopt -s extglob
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-CMD="sudo $SCRIPT_DIR/../localleaf"
+CMD="$SCRIPT_DIR/../localleaf"
 ERROR_COUNT=0
 
 cleanup() {

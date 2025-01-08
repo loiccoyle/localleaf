@@ -30,5 +30,4 @@ jobs:
         with:
           token: ${{ secrets.BOT_ACCESS_TOKEN }}
       - name: Run tests
-        run: |
-          make tests
+        run: make tests
