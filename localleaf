@@ -39,15 +39,16 @@ usage() {
 
 Spins up a latex docker image, monitors .tex files and builds on change.
 
-Usage: %s [OPTIONS] [PROJECT_DIR]
+Usage: %s [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
   -h                          Show this message and exit.
   -m MAIN_DOCUMENT            The main document of the latex project.
-  -e ENGINE                   Latex engine [%s] {%s}
+  -e ENGINE                   Latex engine. [%s] {%s}
   -i IMAGE                    Docker image. [%s]
   -c                          Commit changes on exit.
-  -o                          Don't monitor, build once and exit.
-  -p                          Set build files owner's to \$USER:\$USER on exit.
-  PROJECT_DIR                 Root directory of the latex project ['.'].
+  -1                          Don't monitor, build once and exit.
+  -p                          Set build files owner's to \$USER:\$USER on exit. Requires sudo access.
+  PROJECT_DIR                 Root directory of the latex project. ['.']
+  EXTRA_ARGS                  Extra arguments to pass to latexmk, e.g. --outdir=build/
 " "$CMD" "$ENGINE" "$(
         IFS=,
         echo "${!ENGINE_FLAGS[*]}"
@@ -63,8 +64,9 @@ IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
 CHOWN_TRAP=0
 BUILD_ONCE=0
+PROJECT_DIR="."
 
-while getopts "e:i:m:opch" opt; do
+while getopts "e:i:m:o:1pch" opt; do
     case $opt in
     "h") usage && exit ;;
     "e")
@@ -73,17 +75,29 @@ while getopts "e:i:m:opch" opt; do
         ;;
     "i") IMAGE="$OPTARG" ;;
     "m") MAIN_DOCUMENT="$OPTARG" ;;
-    "o") BUILD_ONCE=1 ;;
+    "1") BUILD_ONCE=1 ;;
     "c") COMMIT_TRAP=1 ;;
     "p") CHOWN_TRAP=1 ;;
     ?) usage && exit 1 ;;
     esac
 done
-shift $((OPTIND - 1))
+
+EXTRA_ARGS=()
+while [[ "$1" != "" ]]; do
+    if [[ "$1" == "--" ]]; then
+        shift
+        while [[ "$1" != "" ]]; do
+            EXTRA_ARGS+=("$1")
+            shift
+        done
+    else
+        PROJECT_DIR="$1"
+        shift
+    fi
+done
 
 type "docker" >/dev/null || err "'docker' not found."
 
-PROJECT_DIR="$(realpath "${1:-.}")"
 PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
@@ -113,7 +127,7 @@ if [ "$BUILD_ONCE" = 1 ]; then
     # Just build once
     LATEX_BUILD="
 echo '$(info "Building once" 2>&1)'
-latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")
+latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT") ${EXTRA_ARGS[*]}
 echo '$(info "Latex build done" 2>&1)'
 "
 else
@@ -124,7 +138,7 @@ else
 echo '$(info "Monitoring *.tex files" 2>&1)'
 while sleep 1; do
   find -type f -name '*.tex' | entr -d sh -c '
-    latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT")
+    latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT") ${EXTRA_ARGS[*]}
     echo \"$(info "Latex build done" 2>&1)\"
 ' && echo '$(info "Triple tap <C-c> to quit" 2>&1)'
 done

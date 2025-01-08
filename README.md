@@ -24,15 +24,16 @@ Easy breezy latex.
 
 Spins up a latex docker image, monitors .tex files and builds on change.
 
-Usage: localleaf [OPTIONS] [PROJECT_DIR]
+Usage: localleaf [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
   -h                          Show this message and exit.
   -m MAIN_DOCUMENT            The main document of the latex project.
-  -e ENGINE                   Latex engine [pdflatex] {latex,pdflatex,xelatex,lualatex}
+  -e ENGINE                   Latex engine. [pdflatex] {latex,pdflatex,xelatex,lualatex}
   -i IMAGE                    Docker image. [loiccoyle/localleaf]
   -c                          Commit changes on exit.
-  -o                          Don't monitor, build once and exit.
-  -p                          Set build files owner's to $USER:$USER on exit.
-  PROJECT_DIR                 Root directory of the latex project ['.'].
+  -1                          Don't monitor, build once and exit.
+  -p                          Set build files owner's to $USER:$USER on exit. Requires sudo access.
+  PROJECT_DIR                 Root directory of the latex project. ['.']
+  EXTRA_ARGS                  Extra arguments to pass to latexmk, e.g. --outdir=build/
 ```
 
 <!-- help end -->
