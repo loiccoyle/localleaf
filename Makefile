@@ -17,4 +17,4 @@ readme:
 
 .PHONY:tests
 tests:
-	./tests/run.sh
+	sudo ./tests/run.sh
