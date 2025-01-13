@@ -63,6 +63,20 @@ IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
 BUILD_ONCE=0
 PROJECT_DIR="."
+EXTRA_ARGS=()
+
+# find and extract everything after --
+for ((i = 1; i <= $#; i++)); do
+    if [[ "${!i}" == "--" ]]; then
+        # get all args before --
+        MAIN_ARGS=("${@:1:$((i - 1))}")
+        # get all args after --
+        EXTRA_ARGS=("${@:$((i + 1))}")
+        # set positional parameters to just the main args
+        set -- "${MAIN_ARGS[@]}"
+        break
+    fi
+done
 
 while getopts "e:i:m:o:1ch" opt; do
     case $opt in
@@ -79,12 +93,16 @@ while getopts "e:i:m:o:1ch" opt; do
     esac
 done
 
-shift "$((OPTIND - 1))"
-EXTRA_ARGS="$*"
+shift $((OPTIND - 1))
+
+if [[ $# -gt 0 ]]; then
+    PROJECT_DIR="$1"
+fi
 
 type "docker" >/dev/null || err "'docker' not found."
 
-PROJECT_DIR_NAME="$(basename "$(realpath "$PROJECT_DIR")")"
+PROJECT_DIR="$(realpath "$PROJECT_DIR")"
+PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
 [ ! -d "$PROJECT_DIR" ] && err "'$PROJECT_DIR' is not a directory."
