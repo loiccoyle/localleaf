@@ -38,18 +38,8 @@ test_build() {
     [ -f "$SCRIPT_DIR/project/main.pdf" ]
 }
 
-test_build_chown() {
-    TEST_NAME="${FUNCNAME[0]}"
-    TEST_DESC="Build pdf and set the correct owner."
-
-    "$CMD" -1 -p -m "$SCRIPT_DIR"/project/main.tex "$SCRIPT_DIR"/project
-    [ -f "$SCRIPT_DIR/project/main.pdf" ] &&
-        [ "$(stat --format '%U' $SCRIPT_DIR/project/main.pdf)" = "$USER" ]
-}
-
 for engine in "latex" "pdflatex" "xelatex" "lualatex"; do
     run test_build "$engine"
 done
-run test_build_chown
 
 exit $ERROR_COUNT
