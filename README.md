@@ -31,7 +31,6 @@ Usage: localleaf [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
   -i IMAGE                    Docker image. [loiccoyle/localleaf]
   -c                          Commit changes on exit.
   -1                          Don't monitor, build once and exit.
-  -p                          Set build files owner's to $USER:$USER on exit. Requires sudo access.
   PROJECT_DIR                 Root directory of the latex project. ['.']
   EXTRA_ARGS                  Extra arguments to pass to latexmk, e.g. --outdir=build/
 ```

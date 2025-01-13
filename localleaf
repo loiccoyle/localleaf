@@ -46,7 +46,6 @@ Usage: %s [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
   -i IMAGE                    Docker image. [%s]
   -c                          Commit changes on exit.
   -1                          Don't monitor, build once and exit.
-  -p                          Set build files owner's to \$USER:\$USER on exit. Requires sudo access.
   PROJECT_DIR                 Root directory of the latex project. ['.']
   EXTRA_ARGS                  Extra arguments to pass to latexmk, e.g. --outdir=build/
 " "$CMD" "$ENGINE" "$(
@@ -62,11 +61,10 @@ check_git() {
 ENGINE="pdflatex"
 IMAGE="loiccoyle/localleaf"
 COMMIT_TRAP=0
-CHOWN_TRAP=0
 BUILD_ONCE=0
 PROJECT_DIR="."
 
-while getopts "e:i:m:o:1pch" opt; do
+while getopts "e:i:m:o:1ch" opt; do
     case $opt in
     "h") usage && exit ;;
     "e")
@@ -77,28 +75,16 @@ while getopts "e:i:m:o:1pch" opt; do
     "m") MAIN_DOCUMENT="$OPTARG" ;;
     "1") BUILD_ONCE=1 ;;
     "c") COMMIT_TRAP=1 ;;
-    "p") CHOWN_TRAP=1 ;;
     ?) usage && exit 1 ;;
     esac
 done
 
-EXTRA_ARGS=()
-while [[ "$1" != "" ]]; do
-    if [[ "$1" == "--" ]]; then
-        shift
-        while [[ "$1" != "" ]]; do
-            EXTRA_ARGS+=("$1")
-            shift
-        done
-    else
-        PROJECT_DIR="$1"
-        shift
-    fi
-done
+shift "$((OPTIND - 1))"
+EXTRA_ARGS="$*"
 
 type "docker" >/dev/null || err "'docker' not found."
 
-PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
+PROJECT_DIR_NAME="$(basename "$(realpath "$PROJECT_DIR")")"
 
 [ -z "$PROJECT_DIR" ] && err "Missing PROJECT_DIR"
 [ ! -d "$PROJECT_DIR" ] && err "'$PROJECT_DIR' is not a directory."
@@ -107,10 +93,6 @@ if [ "$COMMIT_TRAP" == 1 ]; then
     check_git "$PROJECT_DIR" || err "'$PROJECT_DIR' is not a git dir."
     # TODO: Check if the commit works
     trap 'git -C $PROJECT_DIR add -u && git commit -m "Update [localleaf]"' EXIT
-fi
-
-if [ "$CHOWN_TRAP" == 1 ]; then
-    trap 'sudo chown -R --from root:root $USER:$USER $PROJECT_DIR' EXIT
 fi
 
 if [ -z "$MAIN_DOCUMENT" ]; then
@@ -148,7 +130,8 @@ fi
 info "Triple tap <C-c> to quit"
 info "Starting docker container"
 
-docker run -t --rm -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
+docker run -t --rm --user "$(id -u):$(id -g)" \
+    -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
 cd /$PROJECT_DIR_NAME
 $LATEX_BUILD
 "
