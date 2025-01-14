@@ -37,7 +37,7 @@ info() {
 usage() {
     printf "Easy breezy latex.
 
-Spins up a latex docker image, monitors .tex files and builds on change.
+Spins up a latex docker image, monitors source files and builds on change.
 
 Usage: %s [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
   -h                          Show this message and exit.
