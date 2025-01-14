@@ -135,9 +135,9 @@ else
     # When entr detects a new file in the monitored directory, it is added to the monitoring.
     # entr: https://manpages.org/entr
     LATEX_BUILD="
-echo '$(info "Monitoring *.tex files" 2>&1)'
+echo '$(info "Monitoring *.tex, *.cls and *.bib files" 2>&1)'
 while sleep 1; do
-  find -type f -name '*.tex' | entr -d sh -c '
+    find -type f \( -name '*.tex' -o -name '*.cls' -o -name '*.bib' \) | entr -d sh -c '
     latexmk -interaction=batchmode -f ${ENGINE_FLAGS[$ENGINE]} -synctex=1 $(realpath --relative-to="$PROJECT_DIR" "$MAIN_DOCUMENT") ${EXTRA_ARGS[*]}
     echo \"$(info "Latex build done" 2>&1)\"
 ' && echo '$(info "Triple tap <C-c> to quit" 2>&1)'
