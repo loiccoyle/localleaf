@@ -1,18 +1,29 @@
-# 🍃 localleaf
+<div style="text-align: center;">
+  <img src="https://loiccoyle.com/images/projects/localleaf/cover.png" alt="Localleaf cover image" />
+  <img src="https://img.shields.io/github/license/loiccoyle/localleaf" alt="License">
+  <a href="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml">
+    <img src="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://aur.archlinux.org/packages/localleaf-git">
+    <img src="https://img.shields.io/aur/version/localleaf-git" alt="AUR version">
+  </a>
+  <h1>🍃 localleaf 🍃</h1>
+  <p><strong>Easy breezy LaTeX:</strong> A tool to monitor and build LaTeX projects, powered by Docker.</p>
+</div>
 
-![License](https://img.shields.io/github/license/loiccoyle/localleaf)
-[![CI](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg)](https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml)
-[![AUR version](https://img.shields.io/aur/version/localleaf-git)](https://aur.archlinux.org/packages/localleaf-git)
+## ✨ Key Features
 
-> Easy breezy latex.
-
-Spins up a latex docker image, monitors .tex files and builds on change.
+- Monitors `.tex` files and rebuilds the project automatically.
+- Supports various LaTeX engines (e.g., `pdflatex`, `xelatex`, `lualatex`).
+- Keeps your project directory clean with configurable output paths.
 
 ## 📋 Usage
 
-1. Download your overleaf source and extract it.
-   > Pro-tip: sync your project with github and clone it instead!
-2. Run `localleaf project_folder project_folder/main_document.tex`
+To start monitoring and building a LaTeX project, run:
+
+```bash
+localleaf project_dir/ -m project_dir/main_document.tex
+```
 
 If in doubt check the `-h`elp.
 
@@ -36,6 +47,9 @@ Usage: localleaf [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
 ```
 
 <!-- help end -->
+
+> [!TIP]
+> Run with `localleaf {your args} -- --outdir=build/ --auxdir=aux/` to not clutter the root directory with the build and auxiliary files.
 
 ## 📦 Installation
 
