@@ -70,6 +70,9 @@ Using your favourite AUR helper:
 paru -S localleaf-git
 ```
 
+> [!TIP]
+> To keep the docker image up to date, run `docker pull loiccoyle/localleaf` from time to time.
+
 ## 📜 TODO
 
 - [x] Add ci
