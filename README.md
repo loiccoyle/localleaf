@@ -72,10 +72,3 @@ paru -S localleaf-git
 
 > [!TIP]
 > To keep the docker image up to date, run `docker pull loiccoyle/localleaf` from time to time.
-
-## 📜 TODO
-
-- [x] Add ci
-- [x] Add tests to ci
-- [x] Fix root permission on build files
-- [ ] Double check commit on exit
