@@ -1,15 +1,11 @@
-<div style="text-align: center;">
+<p align="center">
   <img src="https://loiccoyle.com/images/projects/localleaf/cover.png" alt="Localleaf cover image" />
+  <a href="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml"><img src="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://aur.archlinux.org/packages/localleaf-git"><img src="https://img.shields.io/aur/version/localleaf-git" alt="AUR version"></a>
   <img src="https://img.shields.io/github/license/loiccoyle/localleaf" alt="License">
-  <a href="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml">
-    <img src="https://github.com/loiccoyle/localleaf/actions/workflows/ci.yml/badge.svg" alt="CI">
-  </a>
-  <a href="https://aur.archlinux.org/packages/localleaf-git">
-    <img src="https://img.shields.io/aur/version/localleaf-git" alt="AUR version">
-  </a>
-  <h1>🍃 localleaf 🍃</h1>
-  <p><strong>Easy breezy LaTeX:</strong> A tool to monitor and build LaTeX projects, powered by Docker.</p>
-</div>
+</p>
+<h1 align="center">🍃 localleaf 🍃</h1>
+<p align="center"><strong>Easy breezy LaTeX:</strong> A tool to monitor and build LaTeX projects, powered by Docker.</p>
 
 ## ✨ Key Features
 
