@@ -9,7 +9,7 @@
 
 ## ✨ Key Features
 
-- Monitors `.tex` files and rebuilds the project automatically.
+- Monitors source files and rebuilds the project automatically.
 - Supports various LaTeX engines (e.g., `pdflatex`, `xelatex`, `lualatex`).
 - Keeps your project directory clean with configurable output paths.
 
