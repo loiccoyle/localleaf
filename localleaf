@@ -65,6 +65,29 @@ BUILD_ONCE=0
 PROJECT_DIR="."
 EXTRA_ARGS=()
 
+find_container_engine() {
+	# Check if podman is available
+	if command -v podman &>/dev/null; then
+		echo "podman"
+		return 0 # Success
+	# Check if docker is available
+	elif command -v docker &>/dev/null; then
+		echo "docker"
+		return 0 # Success
+	else
+		echo "Error: Neither 'podman' nor 'docker' container engine found in PATH." >&2
+		return 1 # Failure
+	fi
+}
+
+CONTAINER_ENGINE=$(find_container_engine)
+
+if [ $? -eq 0 ]; then
+	echo "Selected container engine: $CONTAINER_ENGINE"
+else
+	exit 1
+fi
+
 # find and extract everything after --
 for ((i = 1; i <= $#; i++)); do
     if [[ "${!i}" == "--" ]]; then
@@ -99,7 +122,7 @@ if [[ $# -gt 0 ]]; then
     PROJECT_DIR="$1"
 fi
 
-type "docker" >/dev/null || err "'docker' not found."
+type "$CONTAINER_ENGINE" >/dev/null || err "'$CONTAINER_ENGINE' not found."
 
 PROJECT_DIR="$(realpath "$PROJECT_DIR")"
 PROJECT_DIR_NAME="$(basename "$PROJECT_DIR")"
@@ -168,10 +191,17 @@ done
 fi
 
 info "Triple tap <C-c> to quit"
-info "Starting docker container"
+info "Starting $CONTAINER_ENGINE container"
 
-docker run -t --rm --user "$(id -u):$(id -g)" \
-    -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
+RUN_COMMAND="$CONTAINER_ENGINE run -it --rm"
+
+# Conditionally add the --user flag for Docker (not needed for podman)
+if [ "$CONTAINER_ENGINE" = "docker" ]; then
+	RUN_COMMAND="$RUN_COMMAND --user \"$(id -u):$(id -g)\""
+fi
+
+$RUN_COMMAND \
+	-v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
 cd /$PROJECT_DIR_NAME
 $LATEX_BUILD
 "
