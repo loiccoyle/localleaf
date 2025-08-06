@@ -201,7 +201,7 @@ if [ "$CONTAINER_ENGINE" = "docker" ]; then
 fi
 
 $RUN_COMMAND \
-	-v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME" "$IMAGE" bash -ic "
+	-v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME:z" "$IMAGE" bash -ic "
 cd /$PROJECT_DIR_NAME
 $LATEX_BUILD
 "
