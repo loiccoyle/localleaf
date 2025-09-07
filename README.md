@@ -27,6 +27,7 @@ If in doubt check the `-h`elp.
 
 ```console
 $ localleaf -h
+Selected container engine: podman
 Easy breezy latex.
 
 Spins up a latex docker image, monitors source files and builds on change.
