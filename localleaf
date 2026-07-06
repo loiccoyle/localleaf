@@ -193,12 +193,8 @@ fi
 info "Triple tap <C-c> to quit"
 info "Starting $CONTAINER_ENGINE container"
 
-RUN_COMMAND="$CONTAINER_ENGINE run -it --rm"
-
-# Conditionally add the --user flag for Docker (not needed for podman)
-if [ "$CONTAINER_ENGINE" = "docker" ]; then
-    RUN_COMMAND="$RUN_COMMAND --user \"$(id -u):$(id -g)\""
-fi
+# Pass host UID and GID to use into container
+RUN_COMMAND="$CONTAINER_ENGINE run -it --rm -e UID=$(id -u) -e GID=$(id -g)"
 
 $RUN_COMMAND \
     -v "$(realpath "$PROJECT_DIR")":"/$PROJECT_DIR_NAME:z" "$IMAGE" bash -ic "

@@ -52,7 +52,8 @@ Usage: localleaf [OPTIONS] [PROJECT_DIR] -- [EXTRA_ARGS]
 
 ### Dependencies
 
-You only need `docker`.
+You only need `docker`.  
+(To build the image locally, run `docker build -t loiccoyle/localleaf $(pwd)`.)
 
 ### Manual
 
@@ -60,7 +61,7 @@ Clone this repo and add the script somewhere on your `$PATH`.
 
 ```bash
 git clone https://github.com/loiccoyle/localleaf
-mv localleaf/localleaf ~/.local/bin/
+cp localleaf/localleaf ~/.local/bin/
 ```
 
 ### Arch
